@@ -13428,7 +13428,7 @@ AAAASUVORK5CYII=
 
 <span class="c1">## TODO: Test the performance of the face_detector algorithm </span>
 <span class="c1">## on the images in human_files_short and dog_files_short.</span>
-<span class="c1"># create list of True/False for if human face is detected in images</span>
+
 <span class="c1"># dectect face in human files</span>
 <span class="n">detect_face_human</span> <span class="o">=</span> <span class="p">[</span><span class="n">face_detector</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">human_files_short</span><span class="p">]</span>
 <span class="c1"># detect face in dog files</span>
@@ -13470,7 +13470,7 @@ There are 11.0000 percent of dog images detected to have human face.
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Question 2:</strong> This algorithmic choice necessitates that we communicate to the user that we accept human images only when they provide a clear view of a face (otherwise, we risk having unneccessarily frustrated users!). In your opinion, is this a reasonable expectation to pose on the user? If not, can you think of a way to detect humans in images that does not necessitate an image with a clearly presented face?</p>
-<p><strong>Answer:</strong> I thinh for now it is reasonable until andvancements are dicovered. The picture medium is the closes wit can use and a data set.</p>
+<p><strong>Answer:</strong> I think for now it is reasonable until andvancements are dicovered. The picture medium is the closes wich can  be use and as a data set.</p>
 <p>We suggest the face detector from OpenCV as a potential way to detect human images in your algorithm, but you are free to explore other approaches, especially approaches that make use of deep learning :).  Please use the code cell below to design and test your own face detection algorithm.  If you decide to pursue this <em>optional</em> task, report performance on each of the datasets.</p>
 
 </div>
@@ -13774,40 +13774,52 @@ There are 100.0000 percent of dog images detected to have dog.
 </div>
 </div>
 
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
+</div># (IMPLEMENTATION) Model Architecture
+
+Create a CNN to classify dog breed.  At the end of your code cell block, summarize the layers of your model by executing the line:
+    
+        model.summary()
+
+We have imported some Python modules to get you started, but feel free to import as many modules as you need.  If you end up getting stuck, here's a hint that specifies a model that trains relatively fast on CPU and attains >1% test accuracy in 5 epochs:
+
+![Sample CNN](images/sample_cnn.png)
+           
+__Question 4:__ Outline the steps you took to get to your final CNN architecture and your reasoning at each step.  If you chose to use the hinted architecture above, describe why you think that CNN architecture should work well for the image classification task.
+
+__Answer:__ I just used the architect already used to make things simple. I did not fill this app needs to many layers hidden or LSTM. I did how ever up the filter layer a level to a 32,64,128 size. My thought on that was for a more complex network to push a better accuracy rate.
+
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
 <div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="(IMPLEMENTATION)-Model-Architecture">(IMPLEMENTATION) Model Architecture<a class="anchor-link" href="#(IMPLEMENTATION)-Model-Architecture">&#182;</a></h3><p>Create a CNN to classify dog breed.  At the end of your code cell block, summarize the layers of your model by executing the line:</p>
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Conv2D</span><span class="p">,</span> <span class="n">MaxPooling2D</span><span class="p">,</span> <span class="n">GlobalAveragePooling2D</span>
+<span class="kn">from</span> <span class="nn">keras.layers</span> <span class="kn">import</span> <span class="n">Dropout</span><span class="p">,</span> <span class="n">Flatten</span><span class="p">,</span> <span class="n">Dense</span>
+<span class="kn">from</span> <span class="nn">keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span>
 
-<pre><code>    model.summary()
 
-</code></pre>
-<p>We have imported some Python modules to get you started, but feel free to import as many modules as you need.  If you end up getting stuck, here's a hint that specifies a model that trains relatively fast on CPU and attains &gt;1% test accuracy in 5 epochs:</p>
-<p><img src="images/sample_cnn.png" alt="Sample CNN"></p>
-<p><strong>Question 4:</strong> Outline the steps you took to get to your final CNN architecture and your reasoning at each step.  If you chose to use the hinted architecture above, describe why you think that CNN architecture should work well for the image classification task.</p>
-<p><strong>Answer:</strong> I just used the architect already used to make things simple. I did not fill this app needs to many layers hidden or LSTM. I did how ever up the filter layer a level to a 32,64,128 size. My thought on that was for a more complex network to push a better accuracy rate.</p>
-<p>from keras.layers import Conv2D, MaxPooling2D, GlobalAveragePooling2D
-from keras.layers import Dropout, Flatten, Dense
-from keras.models import Sequential</p>
-<p>model = Sequential()</p>
-<p>image_dim = 224
-n_channels = 3</p>
-<h3 id="TODO:-Define-your-architecture.">TODO: Define your architecture.<a class="anchor-link" href="#TODO:-Define-your-architecture.">&#182;</a></h3><p>model.add(Conv2D(filters=32, kernel_size=2, padding='valid', \
-                 activation='relu', input_shape=(image_dim, image_dim, n_channels)))
-model.add(MaxPooling2D(pool_size=2))
-model.add(Conv2D(filters=64, kernel_size=2, padding='valid', activation='relu'))
-model.add(MaxPooling2D(pool_size=2))
-model.add(Conv2D(filters=128, kernel_size=2, padding='valid', activation='relu'))
-model.add(MaxPooling2D(pool_size=2))
-model.add(GlobalAveragePooling2D('channels_last'))
-model.add(Dense(133, activation='softmax'))
-model.summary()</p>
+<span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+
+<span class="n">image_dim</span> <span class="o">=</span> <span class="mi">224</span>
+<span class="n">n_channels</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="c1">### TODO: Define your architecture.</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span> \
+                 <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">,</span> <span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="n">image_dim</span><span class="p">,</span> <span class="n">image_dim</span><span class="p">,</span> <span class="n">n_channels</span><span class="p">)))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling2D</span><span class="p">(</span><span class="n">pool_size</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling2D</span><span class="p">(</span><span class="n">pool_size</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Conv2D</span><span class="p">(</span><span class="n">filters</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;valid&#39;</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;relu&#39;</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">MaxPooling2D</span><span class="p">(</span><span class="n">pool_size</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">GlobalAveragePooling2D</span><span class="p">(</span><span class="s1">&#39;channels_last&#39;</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="mi">133</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;softmax&#39;</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+</pre></div>
 
 </div>
 </div>
+</div>
+
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
@@ -14746,7 +14758,7 @@ Epoch 20/20
 <h2 id="Step-7:-Test-Your-Algorithm">Step 7: Test Your Algorithm<a class="anchor-link" href="#Step-7:-Test-Your-Algorithm">&#182;</a></h2><p>In this section, you will take your new algorithm for a spin!  What kind of dog does the algorithm think that <strong>you</strong> look like?  If you have a dog, does it predict your dog's breed accurately?  If you have a cat, does it mistakenly think that your cat is a dog?</p>
 <h3 id="(IMPLEMENTATION)-Test-Your-Algorithm-on-Sample-Images!">(IMPLEMENTATION) Test Your Algorithm on Sample Images!<a class="anchor-link" href="#(IMPLEMENTATION)-Test-Your-Algorithm-on-Sample-Images!">&#182;</a></h3><p>Test your algorithm at least six images on your computer.  Feel free to use any images you like.  Use at least two human and two dog images.</p>
 <p><strong>Question 6:</strong> Is the output better than you expected :) ?  Or worse :( ?  Provide at least three possible points of improvement for your algorithm.</p>
-<p><strong>Answer:</strong>  The output was in my opinion around half successful. I dont have any dogs but I have cats. So I plugged my two 65lbs. Maincoon domesticated house cat to try and trick with size and it picked correctly on both. I then used my friend chihuahua in contrast and it chose correctly only once out of the two. I placed two images of me and like the chihuahua it to only guessed once right out of the two. my three possible points to improve the algorithm is 1. Use a different model and feutures that may chose more accurate. 2. Compose the CNN with more layers and longer training batches. 3. Train this on a Semi-Supervised GAN.</p>
+<p><strong>Answer:</strong>  The output was in my opinion around half successful. I dont have any dogs but I have cats. So I plugged my two 65lbs. Maincoon domesticated house cat to try and trick with size and it picked correctly on both. I then used my friend chihuahua in contrast and it chose correctly only once out of the two. I placed two images of me and like the chihuahua it to only guessed once right out of the two. my three possible points to improve the algorithm is 1. Use a different model and feutures that may chose more accurate. 2. Compose the CNN with more layers and longer training batches. 3. Train this on a Disentangled Repersentation Learning GAN's. This will allow training on multiple anlges of a person and animal for a more thourogh foundation.</p>
 
 </div>
 </div>
